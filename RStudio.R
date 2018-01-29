@@ -1,0 +1,11 @@
+#install.packages("maptools")
+#install.packages("ggplot2")
+#install.packages("car")
+library(ggplot2)
+library(car)
+library(maptools)
+library(rgdal)
+getinfo.shape("C:/Stuff/Seagate_Backup/dinesh/education/UTD_Sem/UTD_Sem2/Adv_DA/Lab5/GlasgowWeb/Glasgowshape.shp")
+Glasgow.shp <- readOGR("C:/Stuff/Seagate_Backup/dinesh/education/UTD_Sem/UTD_Sem2/Adv_DA/Lab5/GlasgowWeb/Glasgowshape.shp")
+Glasgow.df <- as.data.frame(Glasgow.shp)
+Glas.frame <- Glasgow.df[c("MEDPRICE","MEDROOM","CRIME","SALES","TYPE","INCOMEDEP")]
