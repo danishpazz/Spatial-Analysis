@@ -2,14 +2,17 @@
 title: "Spatial Data Analysis"
 output:
   html_document:
-    df_print: paged
+    highlight: tango
+    theme: yeti
+editor_options: 
+  chunk_output_type: console
 ---
 
 This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
 
 Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
 
-```{r}
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
 plot(cars)
 ```
 
@@ -23,20 +26,21 @@ The preview shows you a rendered HTML copy of the contents of the editor. Conseq
 Spatial Data Analysis is a process of understanding spatial relationships and patterns from the locational data. 
 *This notebook explains about the procedure for analyzing the factors that influence median house value by hedonic regression model.*
 
-The given dataset *Glasgow* has an infromation of house charactersitics, neighbourhood characterstics at a census level. 
+The given data set *Glasgow* has an information of house characteristics, neighborhood characteristics at a census level. 
 
 First step:
-Install all teh neccsary libraries
+
+*Install all the necessary libraries*
 
 
-```{r}
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
 
-install.packages("ggplot2")
-install.packages("car")
+#install.packages("ggplot2")
+#install.packages("car")
 ```
 Now, Out of all the variables, we will select top 5 features that influence house prices. 
 
-```{r}
+```{r 2, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
 #install.packages("maptools")
 library(ggplot2)
 library(car)
@@ -48,7 +52,7 @@ Glasgow.df <- as.data.frame(Glasgow.shp)
 Glas.frame <- Glasgow.df[c("MEDPRICE","MEDROOM","CRIME","SALES","TYPE","INCOMEDEP")]
 ```
 
-```{r}
+```{r warning=FALSE, paged.print=TRUE}
 scatterplotMatrix(Glas.frame, data=Glasgow.df)
 ```
 
