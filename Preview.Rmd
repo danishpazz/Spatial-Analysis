@@ -4,7 +4,8 @@ output:
   html_document:
     highlight: tango
     theme: yeti
-editor_options: 
+  pdf_document: default
+editor_options:
   chunk_output_type: console
 ---
 
