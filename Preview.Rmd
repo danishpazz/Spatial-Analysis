@@ -61,3 +61,96 @@ scatterplotMatrix(Glas.frame, data=Glasgow.df)
 summary(Glas.frame)
 ```
 
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+library(spdep)                               # Spatial Analysis; also opens libraries "maptools" and "sp"
+library(RColorBrewer)                        # see "http://colorbrewer2.org/"
+library(classInt)                            # functions of data classification
+
+
+
+plotColorQual <- function(var.name,shape,my.title="",
+                          my.legend=deparse(substitute(var.name)),
+                          addToMap=F) {
+  ##
+  ## Plot a qualitative colors for factor "var.name"
+  ##
+  require(spdep); require(RColorBrewer); require(classInt)
+  if (!is.factor(var.name)) stop("plotColorQual: Not a factor.")
+  
+  qualVal <- as.numeric(unclass(var.name))
+  qualName <- levels(var.name)
+  pal.Qual <- brewer.pal(8,"Set3")
+  map.col <- pal.Qual[qualVal]
+  
+  ## generate choropleth map
+  plot(shape,col=map.col,border=grey(0.9),axes=T,add=addToMap)
+  legend("bottomleft", title=my.legend, legend=qualName,
+         fill=pal.Qual[1:length(qualName)],bty="n",ncol=1)
+  title(my.title)
+  box()
+} # end:plotColorQual
+
+plotColorRamp <- function(var.name,shape,n.breaks=8,my.title="",
+                          my.legend=deparse(substitute(var.name)),
+                          addToMap=F) {
+  ##
+  ## Plot a color ramp variable "var.name"
+  ##
+  require(spdep); require(RColorBrewer); require(classInt)
+  
+  ## define breaks and color assignment
+  q.breaks <- classIntervals(var.name, n=n.breaks, style="quantile")
+  pal.YlOrRd <- brewer.pal(n.breaks, "Oranges")
+  #pal.YlOrRd <- brewer.pal(n.breaks, "YlOrRd")
+  map.col <- pal.YlOrRd[findInterval(var.name,q.breaks$brks,rightmost.closed=T)]
+  ## generate choropleth map
+  plot(shape,col=map.col,border=grey(0.9),axes=T,add=addToMap)
+  legend("bottomleft", title=my.legend,legend=leglabs(round(q.breaks$brks,digits=3)),
+         fill=pal.YlOrRd,bty="n",ncol=1)
+  title(my.title)
+  box()
+} # end:plotColorRamp 
+
+plotBiPolar <- function(var.name,shape,
+                        neg.breaks=4,pos.breaks=neg.breaks,break.value=0,
+                        my.title="",my.legend=deparse(substitute(var.name)),
+                        addToMap=F) {
+  ##
+  ## Plot bipolar map theme for variable "var.name"
+  ##
+  require(spdep); require(RColorBrewer); require(classInt)
+  
+  ## define quantile breaks and color assignment
+  q.neg.breaks <- classIntervals((var.name[var.name < break.value]), n=neg.breaks, style="quantile")
+  q.pos.breaks <- classIntervals((var.name[var.name > break.value]), n=pos.breaks, style="quantile")
+  q.breaks <- c(q.neg.breaks$brks[-(neg.breaks+1)],break.value,q.pos.breaks$brks[-1])     # combine neg and pos over zero
+  
+  pal.neg <- brewer.pal(neg.breaks, "Blues")
+  pal.pos <- brewer.pal(pos.breaks, "Reds")
+  pal <- c(rev(pal.neg),pal.pos)                                                # combine palettes
+  
+  map.col <- pal[findInterval(var.name,q.breaks,rightmost.closed=T)]
+  ## generate choropleth map
+  plot(shape,col=map.col,border=grey(0.9),axes=T,add=addToMap)
+  legend("bottomleft", title=my.legend,legend=leglabs(round(q.breaks,digits=3)),
+         fill=pal,bty="n",ncol=1)
+  title(my.title)
+  box()
+} # end:plotBiPolar
+```
+
+```{r echo=TRUE, fig.height=7, fig.width=7, message=FALSE, warning=FALSE, paged.print=FALSE}
+install.packages("spdep")
+install.packages("classInt")
+library("spdep", "classInt")
+library("classInt")
+glasgow.bbox <- bbox(Glasgow.shp)
+
+plot(Glasgow.shp, axes=T, col=grey(0.9), border="white",
+     xlim=glasgow.bbox[1,],ylim=glasgow.bbox[2,])
+plotColorQual(Glasgow.df$TYPE,Glasgow.shp,
+              my.title="Glasgow's Type of Dwellings", 
+              my.legend="Types",addToMap=T)
+ 
+```
+
