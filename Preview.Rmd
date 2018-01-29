@@ -1,5 +1,5 @@
 ---
-title: "R Notebook"
+title: "Spatial Data Analysis"
 output: html_notebook
 ---
 
@@ -19,3 +19,48 @@ The preview shows you a rendered HTML copy of the contents of the editor. Conseq
 
 
 Spatial Data Analysis is a process of understanding spatial relationships and patterns from the locational data. 
+*This notebook explains about the procedure for analyzing the factors that influence median house value by hedonic regression model.*
+
+The given dataset *Glasgow* has an infromation of house charactersitics, neighbourhood characterstics at a census level. 
+
+First step:
+```{r}
+tmp <- tempfile()
+download.file("https://utdallas.box.com/s/fjirg28h5hx4dvfdecv3t3ytfy5arqht", destfile = tmp)
+#Glasgowdf <- as.data.frame(https://utdallas.box.com/s/fjirg28h5hx4dvfdecv3t3ytfy5arqht)
+install.packages("rgdal")
+library(rgdal)
+s1 <- readOGR(".", "GlasgowShape")
+Glasgowdf <- as.data.frame(".", "GlasgowShape")
+rownames(Glasgowdf) <- 1:nrow(Glasgowdf)
+rownames(Glasgowdf)
+```
+
+Now, Out of all teh variables, we will select top 5 features that influence house prices. 
+
+```{r}
+install.packages("maptools")
+install.packages("ggplot2")
+install.packages("car")
+```
+
+
+```{r}
+library(ggplot2)
+library(car)
+library(maptools)
+library(rgdal)
+getinfo.shape("C:/Stuff/Seagate_Backup/dinesh/education/UTD_Sem/UTD_Sem2/Adv_DA/Lab5/GlasgowWeb/Glasgowshape.shp")
+Glasgow.shp <- readOGR("C:/Stuff/Seagate_Backup/dinesh/education/UTD_Sem/UTD_Sem2/Adv_DA/Lab5/GlasgowWeb/Glasgowshape.shp")
+Glasgow.df <- as.data.frame(Glasgow.shp)
+Glas.frame <- Glasgow.df[c("MEDPRICE","MEDROOM","CRIME","SALES","TYPE","INCOMEDEP")]
+```
+
+```{r}
+scatterplotMatrix(Glas.frame, data=Glasgow.df)
+```
+
+```{r}
+summary(Glas.frame)
+```
+
