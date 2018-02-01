@@ -24,10 +24,11 @@ When you save the notebook, an HTML file containing the code and output will be 
 The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
 
 
-Spatial Data Analysis is a process of understanding spatial relationships and patterns from the locational data. 
-*This notebook explains about the procedure for analyzing the factors that influence median house value by hedonic regression model.*
+Spatial Data Analysis is a process of understanding spatial relationships and patterns from the locational data.  
 
-The given data set *Glasgow* has an information of house characteristics, neighborhood characteristics at a census level. 
+*This notebook explains about the procedure of evaluating the factors that influence median house value by hedonic regression model.*
+ 
+The data set I'm working here is *Glasgow*, which has an information of house characteristics, neighborhood characteristics of 271 neighbourhoods. 
 
 First step:
 
@@ -39,19 +40,60 @@ First step:
 #install.packages("ggplot2")
 #install.packages("car")
 ```
-Now, Out of all the variables, we will select top 5 features that influence house prices. 
+ 
 
 ```{r 2, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
 #install.packages("maptools")
 library(ggplot2)
 library(car)
-#library(maptools)
+library(maptools)
 library(rgdal)
-#getinfo.shape("C:/Stuff/Seagate_Backup/dinesh/education/UTD_Sem/UTD_Sem2/Adv_DA/Lab5/GlasgowWeb/Glasgowshape.shp")
+getinfo.shape("C:/Stuff/Seagate_Backup/dinesh/education/UTD_Sem/UTD_Sem2/Adv_DA/Lab5/GlasgowWeb/Glasgowshape.shp")
 Glasgow.shp <- readOGR("C:/Stuff/Seagate_Backup/dinesh/education/UTD_Sem/UTD_Sem2/Adv_DA/Lab5/GlasgowWeb/Glasgowshape.shp")
+#Glasgow.shp <- readShapePoly("GlasgowShape",IDvar="ID", proj4string=CRS("+proj=longlat"))
 Glasgow.df <- as.data.frame(Glasgow.shp)
+```
+
+Lets look explore the dataset. First will list out all the variables in the dataset
+
+```{r}
+ls(Glasgow.df) # list of all variable names
+```
+
+**head()** function helps to view the format of the data of each variable. 
+
+```{r }
+head(Glasgow.df, n= 2) 
+```
+
+As some of the variables are treated of characters, instead of numeric. I converted all of them into numeric. 
+
+```{r} 
+Glasgow.df[, c("MEDPRICE", "MEDROOM", "CRIME")] <-
+  lapply(Glasgow.df[, c("MEDPRICE", "MEDROOM", "CRIME")],
+  function(x) as.numeric(levels(x))[x])
+```
+
+Out of all the variables, we will inspect influence of top 5 features that influence house prices.
+
+```{r}
 Glas.frame <- Glasgow.df[c("MEDPRICE","MEDROOM","CRIME","SALES","TYPE","INCOMEDEP")]
 ```
+
+###Hypothesis formulation
+SALES:-- *Positive* Common sense tells us that stable neighborhoods will have a low percentage of sales as people do not move out from stable neighborhoods.  When a house is sold at a higher price eventually, it positively influences the median home sales price of the surrounding homes.()  
+
+MEDROOM:-- *Positive* Common sense tells us that the more rooms in a dwelling, typically the more expensive the dwelling.  Hence, the rooms have a positive influence over the median home sales price.  
+
+TYPE:-- *Positive* Common sense tells us that the more rooms in a dwelling, typically the more expensive the dwelling.  Hence, the rooms have a positive influence over the median home sales price.  
+
+CRIME:-- *Negative* Common sense tells us that the more crime in an area, the more unstable the neighborhood, which brings down the values of the homes.  In addition, areas with high crime, typically will have a population that is income deprived.  
+
+INCOMEDEP:-- *Negative*  Common sense tells us that the more crime in an area, the more unstable the neighborhood, which brings down the values of the homes.  In addition, areas with high crime, typically will have a population that is income deprived.
+
+# Variable Exploration
+##Variable Exploration
+###Variable Exploration
 
 ```{r warning=FALSE, paged.print=TRUE}
 scatterplotMatrix(Glas.frame, data=Glasgow.df)
@@ -61,10 +103,13 @@ scatterplotMatrix(Glas.frame, data=Glasgow.df)
 summary(Glas.frame)
 ```
 
+####Exploring each variable in a spatial approach manner. 
+
+
 ```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
-library(spdep)                               # Spatial Analysis; also opens libraries "maptools" and "sp"
-library(RColorBrewer)                        # see "http://colorbrewer2.org/"
-library(classInt)                            # functions of data classification
+library(spdep)               # Spatial Analysis; also opens libraries "maptools" and "sp"
+library(RColorBrewer)        # see "http://colorbrewer2.org/"
+library(classInt)            # functions of data classification
 
 
 
@@ -139,10 +184,12 @@ plotBiPolar <- function(var.name,shape,
 } # end:plotBiPolar
 ```
 
+*Chloropath map of **Type of Dwellings** variable*
+
 ```{r echo=TRUE, fig.height=7, fig.width=7, message=FALSE, warning=FALSE, paged.print=FALSE}
-install.packages("spdep")
-install.packages("classInt")
-library("spdep", "classInt")
+#install.packages("spdep")
+#install.packages("classInt")
+library("spdep")
 library("classInt")
 glasgow.bbox <- bbox(Glasgow.shp)
 
@@ -152,5 +199,98 @@ plotColorQual(Glasgow.df$TYPE,Glasgow.shp,
               my.title="Glasgow's Type of Dwellings", 
               my.legend="Types",addToMap=T)
  
+```
+
+*The majority of the detached dwellings are located in the northwest areas and a little bit throughout the southwest and northeast.  Terrace is spread out throughout the city of Glasgow, however only in small IGs.  There is a big IG in the northeast that is predominately all terrace dwellings.  The flats are clustered throughout the center of the city into the southeast tip.  The semi dwellings are mostly in the far outskirts of the city’s north tip, south tip, and a couple throughout the east.*
+
+*Chloropath map of **Median number of rooms** variable*
+
+```{r}
+Glasgow.df$MEDROOM <- factor(Glasgow.df$MEDROOM)
+plot(Glasgow.shp, axes=T, col=grey(0.9), border="white",
+     xlim=glasgow.bbox[1,],ylim=glasgow.bbox[2,])
+plotColorQual(Glasgow.df$MEDROOM,Glasgow.shp,
+              my.title="Glasgow's Median # of Rooms", 
+              my.legend="# of Rooms",addToMap=T)
+```
+
+*There seems to be a clustering of a median of 3 rooms around the main city center; while there is a distribution of a median of 4 rooms throughout the north, northeast, southwest, and south areas of the city, in addition to a couple throughout the city center.  The median of 5 rooms is mostly clustered in the northwest part of the city.  The median with 6 rooms is located in the southwest part of the city in a very small area. Essentially, this might be a wealthy area due to the median rooms being highest, which would mean bigger dwellings are located there.*
+
+*Chloropath map of **Crime rate** variable*
+
+```{r}
+plot(Glasgow.shp,axes=T,col=grey(0.9),border="white",
+     xlim=glasgow.bbox[1,],ylim=glasgow.bbox[2,]) 
+plotColorRamp(Glasgow.df$CRIME,Glasgow.shp,n.breaks=8,
+              my.title="Glasgow's Crime 2008",
+              my.legend=
+              "# of Crimes
+              Per 10,000",addToMap=T)  
+```
+
+*Common sense argument tells us that crime tends to be higher around the main city center; this argument holds true for Glasgow.  If this map would be overlaid with the freeways, we’d be able to see that the freeways run along the darker areas of our map.  The far outskirts in the south and northwest present the least crime.  In addition, a couple areas to the east have low crime rates.  Furthermore, there is a lot of crime along where the river runs in addition to the southeast.*
+
+*Chloropath map of **Property Sales** variable*
+
+```{r}
+plot(Glasgow.shp,axes=T,col=grey(0.9),border="white",
+     xlim=glasgow.bbox[1,],ylim=glasgow.bbox[2,]) 
+plotColorRamp(Glasgow.df$SALES,Glasgow.shp,n.breaks=8,
+              my.title="Glasgow's Property Sales",
+              my.legend="Percent of Sales",addToMap=T) 
+
+```
+
+*There is a lot of movement in some IGs in the northeast tip, southwest tips, and northwest tip.  The areas closer to the main city center are a mixture or high percent of sales versus low percent of sales.  I would argue that since Glasgow is a popular city the high sales closer to the main city center is due to people moving in and out of the city from other cities and countries.  The high sales throughout the outskirts of the city are in relatively very safe IGs, therefore I would conclude that a lot of young people who are starting families are moving out from the city center to the outskirts into detached homes vs their city flats. *
+
+*Chloropath map of **Income Deprived Population** variable*
+
+```{r}
+plot(Glasgow.shp,axes=T,col=grey(0.9),border="white",
+     xlim=glasgow.bbox[1,],ylim=glasgow.bbox[2,]) 
+plotColorRamp(Glasgow.df$INCOMEDEP,Glasgow.shp,n.breaks=8,
+              my.title="Glasgow's Income Deprived Populations 2010",
+              my.legend="Percent of Population",addToMap=T)
+
+```
+
+*The majority of the income deprived populations are concentrated in the southeast of the city.  This area is also concentrated with flat with a median room number of 3.  The population in this cluster is living there not by choice, but by their financial constraints.  However, some parts of the high income deprived population cluster has low crime, which I would argue is contributed by the fact that there is some green space there.*
+
+### Building Regression Model
+
+```{r}
+Glasgowlm <- lm(MEDPRICE~MEDROOM+CRIME+SALES+TYPE+INCOMEDEP, data=Glasgow.df)
+summary(Glasgowlm)
+```
+
+Statistically speaking, CRIME is not considered significant with its p value of 0.403.  TYPE, MEDROOM, SALES, and INCOMEDEP are all relevant variables in describing MEDPRICE.  
+
+##Verifying multicollinearity  
+
+Multicollinearity is defined as a phenomenon where any number of predictor variables are highly correlated, and therefore, one can be predicted from the others with high accuracy.  GVIF has come into play for our multicollinearity test because TYPE is a factor and has more than one degree of freedom as well as more than one coefficient.  The rule of GVIF^(1/(2*Df)) is that less than 2 is a good rule of thumb, which essentially equals a VIF of 4 for one coefficient variables.  As a result, we are not presented with a multicollinearity problem.  
+```{r}
+vif(Glasgowlm)
+```
+
+## Residual analysis  
+
+The Shapiro Wilk test is used to test if the residuals are normally distributed. The null hypothesis states that the residuals are normally distributed, hence a small p-value indicates that we should reject the null and conclude the residuals are not normally distributed.  In addition, the p value needs to be above 0.05.  As a result, the residuals are not normally distributed.
+
+```{r}
+resGlas <- residuals(lm(MEDPRICE~MEDROOM+CRIME+SALES+TYPE+INCOMEDEP, data=Glasgow.df))
+shapiro.test(resGlas)
+```
+
+```{r}
+residualPlots(Glasgowlm)
+```
+
+I would argue that CRIME and SALES might need to be transformed.  I would also like to look more into MEDROOM.
+
+## Analyzing outliers and Influencial cases
+
+```{r}
+#iiplots <- influenceIndexPlot(Glasgowlm, vars=c("Cook", "Studentized", "Bonf", "hat"),    main="Diagnostic Plots", labels=NULL, id.n=4, id.method = "y")
+
 ```
 
