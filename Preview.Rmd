@@ -294,6 +294,11 @@ residualPlots(Glasgowlm)
 
 I would argue that CRIME and SALES might need to be transformed.  I would also like to look more into MEDROOM.
 
+*The following image illustrates the process of transformation* [Source](http://stattrek.com/regression/linear-transformation.aspx?Tutorial=AP)
+
+Image: ![](C:\Stuff\Seagate_Backup\dinesh\education\UTD_Sem\UTD_Sem5\Web Portfolio/Transformation.PNG)
+
+
 ## Analyzing outliers and Influencial cases
 
 ```{r}
