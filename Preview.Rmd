@@ -96,12 +96,17 @@ INCOMEDEP:-- *Negative*  Common sense tells us that the more crime in an area, t
 ###Variable Exploration
 
 ```{r warning=FALSE, paged.print=TRUE}
-scatterplotMatrix(Glas.frame, data=Glasgow.df)
+scatterplotMatrix(Glas.frame)
 ```
 
 ```{r}
 summary(Glas.frame)
 ```
+
+```{r}
+typeof(Glas.frame)
+```
+
 
 ####Exploring each variable in a spatial approach manner. 
 
@@ -256,10 +261,11 @@ plotColorRamp(Glasgow.df$INCOMEDEP,Glasgow.shp,n.breaks=8,
 
 *The majority of the income deprived populations are concentrated in the southeast of the city.  This area is also concentrated with flat with a median room number of 3.  The population in this cluster is living there not by choice, but by their financial constraints.  However, some parts of the high income deprived population cluster has low crime, which I would argue is contributed by the fact that there is some green space there.*
 
+
 ### Building Regression Model
 
 ```{r}
-Glasgowlm <- lm(MEDPRICE~MEDROOM+CRIME+SALES+TYPE+INCOMEDEP, data=Glasgow.df)
+Glasgowlm <- lm(MEDPRICE~MEDROOM+CRIME+SALES+TYPE+INCOMEDEP, data=Glas.frame)
 summary(Glasgowlm)
 ```
 
@@ -267,7 +273,8 @@ Statistically speaking, CRIME is not considered significant with its p value of 
 
 ##Verifying multicollinearity  
 
-Multicollinearity is defined as a phenomenon where any number of predictor variables are highly correlated, and therefore, one can be predicted from the others with high accuracy.  GVIF has come into play for our multicollinearity test because TYPE is a factor and has more than one degree of freedom as well as more than one coefficient.  The rule of GVIF^(1/(2*Df)) is that less than 2 is a good rule of thumb, which essentially equals a VIF of 4 for one coefficient variables.  As a result, we are not presented with a multicollinearity problem.  
+Multicollinearity is defined as a phenomenon where any number of predictor variables are highly correlated, and therefore, one can be predicted from the others with high accuracy.  GVIF has come into play for our multicollinearity test because TYPE is a factor and has more than one degree of freedom as well as more than one coefficient.  The rule of GVIF^(1/(2*Df)) is that less than 2 is a good rule of thumb, which essentially equals a VIF of 4 for one coefficient variables.  As a result, we are not presented with a multicollinearity problem.    
+
 ```{r}
 vif(Glasgowlm)
 ```
@@ -277,7 +284,7 @@ vif(Glasgowlm)
 The Shapiro Wilk test is used to test if the residuals are normally distributed. The null hypothesis states that the residuals are normally distributed, hence a small p-value indicates that we should reject the null and conclude the residuals are not normally distributed.  In addition, the p value needs to be above 0.05.  As a result, the residuals are not normally distributed.
 
 ```{r}
-resGlas <- residuals(lm(MEDPRICE~MEDROOM+CRIME+SALES+TYPE+INCOMEDEP, data=Glasgow.df))
+resGlas <- residuals(lm(MEDPRICE~MEDROOM+CRIME+SALES+TYPE+INCOMEDEP, data=Glas.frame))
 shapiro.test(resGlas)
 ```
 
@@ -290,7 +297,12 @@ I would argue that CRIME and SALES might need to be transformed.  I would also l
 ## Analyzing outliers and Influencial cases
 
 ```{r}
-#iiplots <- influenceIndexPlot(Glasgowlm, vars=c("Cook", "Studentized", "Bonf", "hat"),    main="Diagnostic Plots", labels=NULL, id.n=4, id.method = "y")
+iplots <- influenceIndexPlot(Glasgowlm, vars=c("Cook", "Studentized", "Bonf", "hat"),    main="Diagnostic Plots", labels=NULL, id.n=4, id.method = "y")
 
 ```
+
+In hat-values and Cook’s distance, we can identifity 119 as an outlier. The influential cases include variable 10, 34, 41, and 150.119 appears to be extreme because of CRIME being at over 8000.  The other outliers did not seem too extreme when looking at them.Lets try dropping 119 as its illustrates extreme value. 
+
+
+
 
