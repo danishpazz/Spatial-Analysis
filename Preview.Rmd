@@ -299,11 +299,6 @@ residualPlots(Glasgowlm)
 As the pvalues of Independent variables "MEDROOM", "INCOMEDEP" are less that 0.05 (pvalue < 0.05), these variables needed to be transformed.
 
 
-*The following image illustrates the process of transformation* [Source](http://stattrek.com/regression/linear-transformation.aspx?Tutorial=AP)
-
-Image: ![](C:\Stuff\Seagate_Backup\dinesh\education\UTD_Sem\UTD_Sem5\Web Portfolio/Transformation.PNG)
-
-
 ## Analyzing outliers and Influencial cases
 
 ```{r}
@@ -312,7 +307,7 @@ influenceIndexPlot(Glasgowlm, vars=c("Cook", "Studentized", "Bonf", "hat"),    m
 
 In hat-values and Cook’s distance, we can identifity 119 as an outlier. 119 appears to be extreme because of CRIME being at over 8000. In Studentified and Bonferroni plots, indexes 195, 198 looks to be significant, but not. The pvalues for respective indexed are close to 0.1 but still greater that 0.05. So they are considered as not significant. 
 
-## Outcome of the first model
+### Outcome of the first model
 a. Independent varaibles 'CRIME' is not significant (from summary(model))
 b. Independent variables 'MEDPRICE', 'MEDROOM', 'INCOMEDEP' has to be transformed (from residualplots)
 
@@ -335,19 +330,25 @@ Anova(Glasgowlm_OCrime, Glasgowlm)
 
 As pvalue is greater than 0.05, the null hypothesis cannot be rejected. So we can conclude that "CRIME" can be dropped from the model.  
 
+## Lets talk about transformations now
+
+*The following image illustrates the process of transformation* [Source](http://stattrek.com/regression/linear-transformation.aspx?Tutorial=AP)
+
+Image: ![](C:\Stuff\Seagate_Backup\dinesh\education\UTD_Sem\UTD_Sem5\Web Portfolio/Transformation.PNG)
+
 
 ```{r}
-Glasgowlm_log <- lm(log(MEDPRICE) ~ MEDROOM+CRIME+SALES+TYPE+INCOMEDEP, data=Glas.frame)
+Glasgowlm_log <- lm(log(MEDPRICE) ~ MEDROOM+SALES+TYPE+INCOMEDEP, data=Glas.frame)
 summary(Glasgowlm_log)
 vif(Glasgowlm_log)
-resGlas_log <- residuals(lm(log(MEDPRICE) ~ MEDROOM+CRIME+SALES+TYPE+INCOMEDEP, data=Glas.frame))
+resGlas_log <- residuals(lm(log(MEDPRICE) ~ MEDROOM+SALES+TYPE+INCOMEDEP, data=Glas.frame))
 shapiro.test(resGlas_log)
 residualPlots(Glasgowlm_log)
 ```
 
 
 ```{r}
-Glasgowlm_log2 <- lm(log(MEDPRICE) ~ log(MEDROOM)+CRIME+SALES+TYPE+log(INCOMEDEP), data=Glas.frame)
+Glasgowlm_log2 <- lm(log(MEDPRICE) ~ log(MEDROOM)+SALES+TYPE+log(INCOMEDEP), data=Glas.frame)
 summary(Glasgowlm_log2)
 vif(Glasgowlm_log2)
 resGlas_log2 <- residuals(lm(log(MEDPRICE) ~ log(MEDROOM)+CRIME+SALES+TYPE+log(INCOMEDEP), data=Glas.frame))
@@ -356,9 +357,9 @@ residualPlots(Glasgowlm_log2)
 ```
 
 ```{r}
-Glasgowlm_log3 <- (lm(MEDPRICE ~ MEDROOM + I(MEDROOM ^2) + CRIME + SALES + TYPE+ INCOMEDEP + (INCOMEDEP^2), data=Glas.frame))
+Glasgowlm_log3 <- (lm(MEDPRICE ~ MEDROOM + I(MEDROOM ^2) +  SALES + TYPE+ INCOMEDEP + (INCOMEDEP^2), data=Glas.frame))
 summary(Glasgowlm_log3)
-resGlas_log3 <- residuals(lm(log(MEDPRICE) ~ MEDROOM + CRIME + SALES + I(SALES^0.5) +TYPE+ INCOMEDEP  + I(INCOMEDEP^0.5), data=Glas.frame))
+resGlas_log3 <- residuals(lm(log(MEDPRICE) ~ MEDROOM +  SALES + I(SALES^0.5) +TYPE+ INCOMEDEP  + I(INCOMEDEP^0.5), data=Glas.frame))
 shapiro.test(resGlas_log3)
 residualPlots(Glasgowlm_log3)
 ```
@@ -366,40 +367,32 @@ residualPlots(Glasgowlm_log3)
 ```{r}
 library(car)
 library(e1071)
-summary(powerTransform(cbind(MEDPRICE, MEDROOM, CRIME, SALES, INCOMEDEP) ~ 1, data = Glas.frame))
-lamda.a <- -0.3; lamda.MEDR <- -1; lamda.SALE <- 0.5 ; lamda.INC <- 0.33 
+summary(powerTransform(cbind(MEDPRICE, MEDROOM, TYPE, SALES, INCOMEDEP) ~ 1, data = Glas.frame))
+lamda.Pri <- 0; lamda.MEDR <- -1; lamda.SALE <- 0.5 ; lamda.INC <- 0.33 
 
-Glasgowlm_log4 <- (lm(MEDPRICE ~ bcPower(MEDROOM, lamda.MEDR)+ MEDROOM +  log(CRIME) + bcPower(SALES, lamda.SALE) + SALES + TYPE +bcPower(INCOMEDEP, lamda.INC)+ INCOMEDEP, data=Glas.frame))
+Glasgowlm_log4 <- (lm(log(MEDPRICE) ~ bcPower(MEDROOM, lamda.MEDR)+ MEDROOM +  bcPower(SALES, lamda.SALE) + SALES + TYPE +bcPower(INCOMEDEP, lamda.INC)+ INCOMEDEP, data=Glas.frame))
 summary(Glasgowlm_log4)
 
 ```
 
 ```{r}
-Glasgowlm_OType <- (lm(MEDPRICE ~ bcPower(MEDROOM, lamda.MEDR)+ MEDROOM +  log(CRIME) + bcPower(SALES, lamda.SALE) + SALES + bcPower(INCOMEDEP, lamda.INC)+ INCOMEDEP, data=Glas.frame))
-summary(Glasgowlm_OType)
+resGlas_4 <- residuals(Glasgowlm_log4)
+shapiro.test(resGlas_4)
 ```
 
 ```{r}
-anova(Glasgowlm_OType, Glasgowlm_log4)
-```
-
-As pvalue is greater than 0.05, we 
-
-```{r}
-Glasgowlm_OCrime <- (lm(MEDPRICE ~ bcPower(MEDROOM, lamda.MEDR)+ MEDROOM +  TYPE + bcPower(SALES, lamda.SALE) + SALES + bcPower(INCOMEDEP, lamda.INC)+ INCOMEDEP, data=Glas.frame))
-summary(Glasgowlm_OCrime)
+residualPlots(Glasgowlm_log4, main = "Full Model")
 ```
 
 ```{r}
-anova(Glasgowlm_OCrime, Glasgowlm_log4)
+qqPlot(Glasgowlm_log4, id.n = 2)
 ```
 
-so we fail reject both null hypothesis. So that CRIME is significant in the model.
-
-Now, will look again reagrding teh residuals. 
 ```{r}
-#residualPlots(Glasgowlm_log5)
+influenceIndexPlot(Glasgowlm_log4, id.n = 2)
 ```
 
 
-
+```{r}
+avPlots(Glasgowlm_log4, id.n = 2)
+```
