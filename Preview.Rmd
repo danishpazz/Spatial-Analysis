@@ -15,6 +15,7 @@ Try executing this chunk by clicking the *Run* button within the chunk or by pla
 
 ```{r message=FALSE, warning=FALSE, paged.print=FALSE}
 plot(cars)
+
 ```
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
@@ -67,6 +68,8 @@ head(Glasgow.df, n= 2)
 ```
 
 As some of the variables are treated of characters, instead of numeric. I converted all of them into numeric. 
+
+
 
 ```{r} 
 Glasgow.df[, c("MEDPRICE", "MEDROOM", "CRIME")] <-
@@ -307,6 +310,52 @@ iplots <- influenceIndexPlot(Glasgowlm, vars=c("Cook", "Studentized", "Bonf", "h
 ```
 
 In hat-values and Cook’s distance, we can identifity 119 as an outlier. The influential cases include variable 10, 34, 41, and 150.119 appears to be extreme because of CRIME being at over 8000.  The other outliers did not seem too extreme when looking at them.Lets try dropping 119 as its illustrates extreme value. 
+
+
+```{r}
+Glasgowlm_log <- lm(log(MEDPRICE) ~ MEDROOM+CRIME+SALES+TYPE+INCOMEDEP, data=Glas.frame)
+summary(Glasgowlm_log)
+vif(Glasgowlm_log)
+resGlas_log <- residuals(lm(log(MEDPRICE) ~ MEDROOM+CRIME+SALES+TYPE+INCOMEDEP, data=Glas.frame))
+shapiro.test(resGlas_log)
+residualPlots(Glasgowlm_log)
+```
+
+
+```{r}
+Glasgowlm_log2 <- lm(log(MEDPRICE) ~ log(MEDROOM)+CRIME+SALES+TYPE+log(INCOMEDEP), data=Glas.frame)
+summary(Glasgowlm_log2)
+vif(Glasgowlm_log2)
+resGlas_log2 <- residuals(lm(log(MEDPRICE) ~ log(MEDROOM)+CRIME+SALES+TYPE+log(INCOMEDEP), data=Glas.frame))
+shapiro.test(resGlas_log2)
+residualPlots(Glasgowlm_log2)
+```
+
+```{r}
+Glasgowlm_log3 <- (lm(log(MEDPRICE) ~ MEDROOM + CRIME + SALES + I(SALES^0.5) +TYPE+ INCOMEDEP  + I(INCOMEDEP^0.5), data=Glas.frame))
+summary(Glasgowlm_log3)
+resGlas_log3 <- residuals(lm(log(MEDPRICE) ~ MEDROOM + CRIME + SALES + I(SALES^0.5) +TYPE+ INCOMEDEP  + I(INCOMEDEP^0.5), data=Glas.frame))
+shapiro.test(resGlas_log3)
+residualPlots(Glasgowlm_log3)
+```
+
+```{r}
+summary(powerTransform(cbind(MEDPRICE, MEDROOM, CRIME, SALES, INCOMEDEP) ~ 1, data = Glas.frame))
+```
+
+```{r}
+
+Glas_subset <- as.data.frame(subset(Glasgow.df, select = - c(ID, INTGEOCODE, INTGEONAME)))
+Glas_Numsub <- lapply(Glas_subset, as.numeric)
+lapply(Glas_Numsub, class)
+lmmodel <- lm(MEDROOM ~ . , data = Glas_subset)
+summary(lmmodel)
+```
+
+ 
+Glas_subset[, c("FEM2001", "MALE2001", "POP2001", "NOFDWELL", "NOFSALES", "MEDROOM", "ASSAULT", "OBSRES2009", "OBSRES2009")] <-
+  lapply(Glas_subset[, c("FEM2001", "MALE2001", "POP2001", "NOFDWELL", "NOFSALES", "MEDROOM", "ASSAULT", "OBSRES2009", "OBSRES2009")],
+  function(x) as.numeric(levels(x))[x])
 
 
 
