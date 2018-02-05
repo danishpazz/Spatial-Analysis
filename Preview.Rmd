@@ -332,29 +332,23 @@ residualPlots(Glasgowlm_log2)
 ```
 
 ```{r}
-Glasgowlm_log3 <- (lm(log(MEDPRICE) ~ MEDROOM + CRIME + SALES + I(SALES^0.5) +TYPE+ INCOMEDEP  + I(INCOMEDEP^0.5), data=Glas.frame))
+Glasgowlm_log3 <- (lm(MEDPRICE ~ MEDROOM + I(MEDROOM ^2) + CRIME + SALES + TYPE+ INCOMEDEP + (INCOMEDEP^2)+ TIMESHOP, data=Glas_subset))
 summary(Glasgowlm_log3)
-resGlas_log3 <- residuals(lm(log(MEDPRICE) ~ MEDROOM + CRIME + SALES + I(SALES^0.5) +TYPE+ INCOMEDEP  + I(INCOMEDEP^0.5), data=Glas.frame))
+resGlas_log3 <- residuals(lm(log(MEDPRICE) ~ MEDROOM + CRIME + SALES + I(SALES^0.5) +TYPE+ INCOMEDEP  + I(INCOMEDEP^0.5+ NOFDWELL), data=Glas_subset))
 shapiro.test(resGlas_log3)
 residualPlots(Glasgowlm_log3)
 ```
 
 ```{r}
-summary(powerTransform(cbind(MEDPRICE, MEDROOM, CRIME, SALES, INCOMEDEP) ~ 1, data = Glas.frame))
+library(car)
+library(e1071)
+summary(powerTransform(cbind(MEDPRICE, MEDROOM, CRIME, SALES, INCOMEDEP, TIMESHOP) ~ 1, data = Glas_subset))
+lamda.a <- -0.3; lamda.b <- -1; lamda.c <- -0.1; lamda.d <- 0.5 ; lamda.e <- 0.33 
+
+Glasgowlm_log4 <- (lm(MEDPRICE ~ bcPower(MEDROOM, lamda.b)+ MEDROOM + bcPower(CRIME, lamda.c) + CRIME + bcPower(SALES, lamda.d) + SALES + TYPE +bcPower(INCOMEDEP, lamda.e)+ INCOMEDEP +log(TIMESHOP), data=Glas_subset))
+summary(Glasgowlm_log4)
 ```
 
-```{r}
-
-Glas_subset <- as.data.frame(subset(Glasgow.df, select = - c(ID, INTGEOCODE, INTGEONAME)))
-
-
-
-
-Glas_Numsub <- lapply(Glas_subset, as.numeric)
-lapply(Glas_Numsub, class)
-lmmodel <- lm(MEDROOM ~ . , data = Glas_subset)
-summary(lmmodel)
-```
 
  
 
