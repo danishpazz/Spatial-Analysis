@@ -346,6 +346,10 @@ summary(powerTransform(cbind(MEDPRICE, MEDROOM, CRIME, SALES, INCOMEDEP) ~ 1, da
 ```{r}
 
 Glas_subset <- as.data.frame(subset(Glasgow.df, select = - c(ID, INTGEOCODE, INTGEONAME)))
+
+
+
+
 Glas_Numsub <- lapply(Glas_subset, as.numeric)
 lapply(Glas_Numsub, class)
 lmmodel <- lm(MEDROOM ~ . , data = Glas_subset)
@@ -353,9 +357,7 @@ summary(lmmodel)
 ```
 
  
-Glas_subset[, c("FEM2001", "MALE2001", "POP2001", "NOFDWELL", "NOFSALES", "MEDROOM", "ASSAULT", "OBSRES2009", "OBSRES2009")] <-
-  lapply(Glas_subset[, c("FEM2001", "MALE2001", "POP2001", "NOFDWELL", "NOFSALES", "MEDROOM", "ASSAULT", "OBSRES2009", "OBSRES2009")],
-  function(x) as.numeric(levels(x))[x])
+
 
 
 
