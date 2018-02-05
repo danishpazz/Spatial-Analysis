@@ -40,11 +40,13 @@ First step:
 
 #install.packages("ggplot2")
 #install.packages("car")
+#install.packages("maptools")
+#install.packages("spdep")
+#install.packages("classInt")
 ```
  
 
 ```{r 2, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
-#install.packages("maptools")
 library(ggplot2)
 library(car)
 library(maptools)
@@ -68,8 +70,6 @@ head(Glasgow.df, n= 2)
 ```
 
 As some of the variables are treated of characters, instead of numeric. I converted all of them into numeric. 
-
-
 
 ```{r} 
 Glasgow.df[, c("MEDPRICE", "MEDROOM", "CRIME")] <-
@@ -195,8 +195,6 @@ plotBiPolar <- function(var.name,shape,
 *Chloropath map of **Type of Dwellings** variable*
 
 ```{r echo=TRUE, fig.height=7, fig.width=7, message=FALSE, warning=FALSE, paged.print=FALSE}
-#install.packages("spdep")
-#install.packages("classInt")
 library("spdep")
 library("classInt")
 glasgow.bbox <- bbox(Glasgow.shp)
@@ -265,7 +263,7 @@ plotColorRamp(Glasgow.df$INCOMEDEP,Glasgow.shp,n.breaks=8,
 *The majority of the income deprived populations are concentrated in the southeast of the city.  This area is also concentrated with flat with a median room number of 3.  The population in this cluster is living there not by choice, but by their financial constraints.  However, some parts of the high income deprived population cluster has low crime, which I would argue is contributed by the fact that there is some green space there.*
 
 
-### Building Regression Model
+## Building Regression Model
 
 ```{r}
 Glasgowlm <- lm(MEDPRICE~MEDROOM+CRIME+SALES+TYPE+INCOMEDEP, data=Glas.frame)
@@ -284,18 +282,22 @@ vif(Glasgowlm)
 
 ## Residual analysis  
 
-The Shapiro Wilk test is used to test if the residuals are normally distributed. The null hypothesis states that the residuals are normally distributed, hence a small p-value indicates that we should reject the null and conclude the residuals are not normally distributed.  In addition, the p value needs to be above 0.05.  As a result, the residuals are not normally distributed.
+The Shapiro Wilk test is used to test if the residuals are normally distributed. To say that residuals are normally distributed, the p value needs to be above 0.05.  
 
 ```{r}
-resGlas <- residuals(lm(MEDPRICE~MEDROOM+CRIME+SALES+TYPE+INCOMEDEP, data=Glas.frame))
+qqPlot(Glasgowlm, id.n = 1)
+resGlas <- residuals(Glasgowlm)
 shapiro.test(resGlas)
 ```
+
+Hence a small p-value indicates that we should reject the null hypothesis and conclude that the residuals are not normally distributed. 
 
 ```{r}
 residualPlots(Glasgowlm)
 ```
 
-I would argue that CRIME and SALES might need to be transformed.  I would also like to look more into MEDROOM.
+As the pvalues of Independent variables "MEDROOM", "INCOMEDEP" are less that 0.05 (pvalue < 0.05), these variables needed to be transformed.
+
 
 *The following image illustrates the process of transformation* [Source](http://stattrek.com/regression/linear-transformation.aspx?Tutorial=AP)
 
@@ -305,11 +307,33 @@ Image: ![](C:\Stuff\Seagate_Backup\dinesh\education\UTD_Sem\UTD_Sem5\Web Portfol
 ## Analyzing outliers and Influencial cases
 
 ```{r}
-iplots <- influenceIndexPlot(Glasgowlm, vars=c("Cook", "Studentized", "Bonf", "hat"),    main="Diagnostic Plots", labels=NULL, id.n=4, id.method = "y")
-
+influenceIndexPlot(Glasgowlm, vars=c("Cook", "Studentized", "Bonf", "hat"),    main="Diagnostic Plots", labels=NULL, id.n=2, id.method = "y")
 ```
 
-In hat-values and Cook’s distance, we can identifity 119 as an outlier. The influential cases include variable 10, 34, 41, and 150.119 appears to be extreme because of CRIME being at over 8000.  The other outliers did not seem too extreme when looking at them.Lets try dropping 119 as its illustrates extreme value. 
+In hat-values and Cook’s distance, we can identifity 119 as an outlier. 119 appears to be extreme because of CRIME being at over 8000. In Studentified and Bonferroni plots, indexes 195, 198 looks to be significant, but not. The pvalues for respective indexed are close to 0.1 but still greater that 0.05. So they are considered as not significant. 
+
+## Outcome of the first model
+a. Independent varaibles 'CRIME' is not significant (from summary(model))
+b. Independent variables 'MEDPRICE', 'MEDROOM', 'INCOMEDEP' has to be transformed (from residualplots)
+
+## Model Revision 1
+
+CRIME is dropped from the earlier model. 
+
+```{r}
+Glasgowlm_OCrime <- lm(MEDPRICE~MEDROOM+SALES+TYPE+INCOMEDEP, data=Glas.frame)
+summary(Glasgowlm_OCrime)
+```
+
+*Result* Now, all the indepedent variables are highly significant. 
+
+Evaluation of the model by using anova F test
+
+```{r}
+Anova(Glasgowlm_OCrime, Glasgowlm)
+```
+
+As pvalue is greater than 0.05, the null hypothesis cannot be rejected. So we can conclude that "CRIME" can be dropped from the model.  
 
 
 ```{r}
@@ -332,9 +356,9 @@ residualPlots(Glasgowlm_log2)
 ```
 
 ```{r}
-Glasgowlm_log3 <- (lm(MEDPRICE ~ MEDROOM + I(MEDROOM ^2) + CRIME + SALES + TYPE+ INCOMEDEP + (INCOMEDEP^2)+ TIMESHOP, data=Glas_subset))
+Glasgowlm_log3 <- (lm(MEDPRICE ~ MEDROOM + I(MEDROOM ^2) + CRIME + SALES + TYPE+ INCOMEDEP + (INCOMEDEP^2), data=Glas.frame))
 summary(Glasgowlm_log3)
-resGlas_log3 <- residuals(lm(log(MEDPRICE) ~ MEDROOM + CRIME + SALES + I(SALES^0.5) +TYPE+ INCOMEDEP  + I(INCOMEDEP^0.5+ NOFDWELL), data=Glas_subset))
+resGlas_log3 <- residuals(lm(log(MEDPRICE) ~ MEDROOM + CRIME + SALES + I(SALES^0.5) +TYPE+ INCOMEDEP  + I(INCOMEDEP^0.5), data=Glas.frame))
 shapiro.test(resGlas_log3)
 residualPlots(Glasgowlm_log3)
 ```
@@ -342,17 +366,40 @@ residualPlots(Glasgowlm_log3)
 ```{r}
 library(car)
 library(e1071)
-summary(powerTransform(cbind(MEDPRICE, MEDROOM, CRIME, SALES, INCOMEDEP, TIMESHOP) ~ 1, data = Glas_subset))
-lamda.a <- -0.3; lamda.b <- -1; lamda.c <- -0.1; lamda.d <- 0.5 ; lamda.e <- 0.33 
+summary(powerTransform(cbind(MEDPRICE, MEDROOM, CRIME, SALES, INCOMEDEP) ~ 1, data = Glas.frame))
+lamda.a <- -0.3; lamda.MEDR <- -1; lamda.SALE <- 0.5 ; lamda.INC <- 0.33 
 
-Glasgowlm_log4 <- (lm(MEDPRICE ~ bcPower(MEDROOM, lamda.b)+ MEDROOM + bcPower(CRIME, lamda.c) + CRIME + bcPower(SALES, lamda.d) + SALES + TYPE +bcPower(INCOMEDEP, lamda.e)+ INCOMEDEP +log(TIMESHOP), data=Glas_subset))
+Glasgowlm_log4 <- (lm(MEDPRICE ~ bcPower(MEDROOM, lamda.MEDR)+ MEDROOM +  log(CRIME) + bcPower(SALES, lamda.SALE) + SALES + TYPE +bcPower(INCOMEDEP, lamda.INC)+ INCOMEDEP, data=Glas.frame))
 summary(Glasgowlm_log4)
+
 ```
 
+```{r}
+Glasgowlm_OType <- (lm(MEDPRICE ~ bcPower(MEDROOM, lamda.MEDR)+ MEDROOM +  log(CRIME) + bcPower(SALES, lamda.SALE) + SALES + bcPower(INCOMEDEP, lamda.INC)+ INCOMEDEP, data=Glas.frame))
+summary(Glasgowlm_OType)
+```
 
- 
+```{r}
+anova(Glasgowlm_OType, Glasgowlm_log4)
+```
 
+As pvalue is greater than 0.05, we 
 
+```{r}
+Glasgowlm_OCrime <- (lm(MEDPRICE ~ bcPower(MEDROOM, lamda.MEDR)+ MEDROOM +  TYPE + bcPower(SALES, lamda.SALE) + SALES + bcPower(INCOMEDEP, lamda.INC)+ INCOMEDEP, data=Glas.frame))
+summary(Glasgowlm_OCrime)
+```
+
+```{r}
+anova(Glasgowlm_OCrime, Glasgowlm_log4)
+```
+
+so we fail reject both null hypothesis. So that CRIME is significant in the model.
+
+Now, will look again reagrding teh residuals. 
+```{r}
+#residualPlots(Glasgowlm_log5)
+```
 
 
 
