@@ -28,3 +28,13 @@ plot(pressure)
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+## Objective
+The main purpose of this project is to identify and evaluate the factors that influence the median home value at census tract level. Segmenting it, the following are the expected outcomes of the project:  
+a. Identification of the variables at census track level and at site level that influence house prices.  
+b. Analyze the spatial patterns of the neighborhood characteristics such as Demographics, school quality, travel time to work and so on.  
+c. Build a hedonic pricing model and calculate the coefficients that determines the buyer’s willingness to pay for additional characteristics.
+
+
+
+
