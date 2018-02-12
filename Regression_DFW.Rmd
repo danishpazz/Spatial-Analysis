@@ -60,7 +60,7 @@ To build a good accurate model, the sample population should have good variance 
 
 Median House Age: As most of the north american cities are designed as monocentirc models, the residential houses near to the Central buisness district were built earlier than others on the suburbs. The following image illustrates the spatial pattern of it. 
 
-![](C:/Stuff/Seagate_Backup/dinesh/education/UTD_Sem/UTD_Sem5/Master Project/R_Ms_NB/Spatial-Data-Analysis/County_CT_HouseAgepng.png)
+Image: ![](C:/Stuff/Seagate_Backup/dinesh/education/UTD_Sem/UTD_Sem5/MasterProject/R_Ms_NB/Spatial-Data-Analysis/County_CT_HouseAgepng.png)
 
 
 Per Capita Income:
