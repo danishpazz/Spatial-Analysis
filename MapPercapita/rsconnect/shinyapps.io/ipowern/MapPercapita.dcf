@@ -1,0 +1,12 @@
+name: MapPercapita
+title: MapPercapita
+username:
+account: ipowern
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 279207
+bundleId: 1218592
+url: https://ipwrn.shinyapps.io/MapPercapita/
+when: 1518414633.06297
+asMultiple: FALSE
+asStatic: FALSE

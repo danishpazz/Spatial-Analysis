@@ -35,6 +35,46 @@ a. Identification of the variables at census track level and at site level that 
 b. Analyze the spatial patterns of the neighborhood characteristics such as Demographics, school quality, travel time to work and so on.  
 c. Build a hedonic pricing model and calculate the coefficients that determines the buyer’s willingness to pay for additional characteristics.
 
+## Preliminary Analysis
+In general when we think about the factors that influence house prices at Censes Track level, the first thing comes to the mind are *Per capita income, Median Number of rooms and vacancy rates at  neighbourhood effects. From the literature review, many other variables such as Median House Price, Floor Space, Age | School District | Distance to CBD , No of Job Opening per person | Distance to Major Road* were also disccussed. 
+
+Table Header      
+-----------,-----------,-----------,-----------,-----------,  
+Median House Price, Floor Space, Age | School District | Distance to CBD 
+No of Job Opening per person | Distance to Major Road 
+
+
+```{r}
+smoke <- matrix(c("Median_House_Price", 'Floor_Space, Age' , 'School_District' , 'Distance2CBD', 'No_of_JobOpening_perperson' , 'Distance2MajorRoad'), ncol = 2, byrow = TRUE)
+
+```
+
+So, after carefull examination the following variables are considered for the preliminary analysis. *Population growth, Median House Age, Percapita Income, Population growth rate, School District, Distance to CBT, Vacancy rate, Median no of Rooms, House price Index*. 
+
+## Study Area
+
+To build a good accurate model, the sample population should have good variance that can reflect variance of the full population. So all three counties Dallas, Collin, Denton are analyzed with respect to the Median House age, Per capita income and popualtion growth patterns.   
+
+### Reasons behind selecting the variables are 
+
+Median House Age: As most of the north american cities are designed as monocentirc models, the residential houses near to the Central buisness district were built earlier than others on the suburbs. The following image illustrates the spatial pattern of it. 
+
+![](C:/Stuff/Seagate_Backup/dinesh/education/UTD_Sem/UTD_Sem5/Master Project/R_Ms_NB/Spatial-Data-Analysis/County_CT_HouseAgepng.png)
+
+
+Per Capita Income:
+```{r, echo = FALSE}
+shinyAppDir(
+  system.file("https://ipwrn.shinyapps.io/MapPercapita/", package="shiny"),
+  options=list(
+    width="100%", height=700
+  )
+)
+```
+
+
+
+
 
 
 
