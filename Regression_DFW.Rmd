@@ -65,7 +65,7 @@ Image: ![](C:/Stuff/Seagate_Backup/dinesh/education/UTD_Sem/UTD_Sem5/MasterProje
 
 Per Capita Income:
 
-```{r}
+```{r eval=FALSE, include=FALSE}
 library(shiny)
 shinyApp(
   
@@ -115,6 +115,9 @@ shinyApp(
 ```
 
 
+```{r}
+knitr::include_app("https://ipwrn.shinyapps.io/MapPercapita/")
+```
 
 
 
