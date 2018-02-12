@@ -3,7 +3,7 @@ title: "Regression_Dfw"
 author: "ipowern"
 date: "February 11, 2018"
 output: html_document
-runtime: shiny
+
 ---
 
 ```{r setup, include=FALSE}
@@ -56,6 +56,7 @@ So, after careful examination the following variables are considered for the pre
 Obviously, City of Dallas/ Dallas County is the most preferred location because of the Knowledge about local markets. As both City and Metroplex are huge in size, I opted to chose a portion of area. The points that are considered while choosing the study area are as follows: 
 
 ```{r}
+library(leaflet)
 leaflet() %>%
    setView(-96.800902, 32.780762, zoom = 10) %>% 
    addTiles() %>%
@@ -68,7 +69,7 @@ To build an accurate regression model, the sample population should have good va
 **Median House Age:** Spatial clustering of same age houses reflects the growth of any city. As most of the north american cities are designed as monochromatic models, the residential houses near to the Central business district were built earlier and due to the growth, new houses were built on teh pheriphery of the city boundaries. This phenomenon can be clearly observed in Dalals County. Most of the early built houses are with in the circular boundary of I635 and I20. 
 The following image illustrates the spatial pattern of it. 
 
-Image: ![](https://github.com/danishpazz/Spatial-Data-Analysis.git/County_CT_HouseAgepng.png)
+Image: ![](County_CT_HouseAgepng.png)
 
 
 **Per Capita Income:**
