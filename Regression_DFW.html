@@ -172,6 +172,52 @@ Median House Price, Floor Space, Age | School District | Distance to CBD No of J
 
 </div>
 <p>Per Capita Income:</p>
+<pre class="r"><code>library(shiny)
+shinyApp(
+  
+
+  # Define UI for application that draws a histogram
+  ui &lt;- fluidPage(
+     
+     # Application title
+     titlePanel(&quot;Old Faithful Geyser Data&quot;),
+     
+     # Sidebar with a slider input for number of bins 
+     sidebarLayout(
+        sidebarPanel(
+           sliderInput(&quot;bins&quot;,
+                       &quot;Number of bins:&quot;,
+                       min = 1,
+                       max = 50,
+                       value = 30)
+        ),
+        
+        # Show a plot of the generated distribution
+        mainPanel(
+           plotOutput(&quot;distPlot&quot;)
+        )
+     )
+  ),
+   
+
+     
+  
+  
+  # Define server logic required to draw a histogram
+  server &lt;- function(input, output) {
+     
+     output$distPlot &lt;- renderPlot({
+        # generate bins based on input$bins from ui.R
+        x    &lt;- faithful[, 2] 
+        bins &lt;- seq(min(x), max(x), length.out = input$bins + 1)
+        
+        # draw the histogram with the specified number of bins
+        hist(x, breaks = bins, col = 'darkgray', border = 'white')
+     })
+  }
+
+)</code></pre>
+<div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div>
 </div>
 </div>
 
