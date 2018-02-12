@@ -71,5 +71,9 @@ The following image illustrates the spatial pattern of it.
 
 Image: ![](County_CT_HouseAgepng.png)
 
+**Per Capita Income:** Value of the house is highly correlated with the average income level. So, I analyzed the per capita income by census tract level and analyzed the spatial patterns. The following image illustrates it.   
 
-**Per Capita Income:**
+Image: ![](County_CT_PercapiInc.png)
+
+**Vacancy rate:**
+
