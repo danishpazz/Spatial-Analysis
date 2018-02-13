@@ -1,7 +1,7 @@
 ---
-title: "Regression_Dfw"
-author: "ipowern"
-date: "February 11, 2018"
+title: "ipowern"
+author: "Dinesh"
+date: "February 13, 2018"
 output: html_document
 
 ---
@@ -14,21 +14,21 @@ knitr::opts_chunk$set(echo = TRUE)
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+## Project Overview
 
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+* Objective
+* Project Scope and Preliminary Analysis  
+    + Study Area
+* Data Collection
+* Exploratory Analysis
+    + Univariate Analysis
+* Data Cleaning and Data Modeling
+* Model Building
+    + Correlation Analysis 
+    + Residual Analysis
+    + Variable transformations
+* Comparing Regression Models (Tentative) 
+* Insights
 
 ## Objective
 The main purpose of this project is to identify and evaluate the factors that influence the median home value at census tract level. Segmenting it, the following are the expected outcomes of the project:  
@@ -36,24 +36,16 @@ a. Identification of the variables at census track level and at site level that 
 b. Analyze the spatial patterns of the neighborhood characteristics such as Demographics, school quality, travel time to work and so on.  
 c. Build a hedonic pricing model and calculate the coefficients that determines the buyer’s willingness to pay for additional characteristics.
 
+
 ## Preliminary Analysis
 In general when we think about the factors that influence house prices at Census Track level, the first thing comes to the mind are *Per capita income, Median Number of rooms and vacancy rates at  neighbourhood effects. From the literature review, many other variables such as Median House Price, Floor Space, Age | School District | Distance to CBD , No of Job Opening per person | Distance to Major Road* were also discussed. 
 
-Table Header      
------------,-----------,-----------,-----------,-----------,  
-Median House Price, Floor Space, Age | School District | Distance to CBD 
-No of Job Opening per person | Distance to Major Road 
-
-
-```{r}
-smoke <- matrix(c("Median_House_Price", 'Floor_Space, Age' , 'School_District' , 'Distance2CBD', 'No_of_JobOpening_perperson' , 'Distance2MajorRoad'), ncol = 2, byrow = TRUE)
-
-```
 
 So, after careful examination the following variables are considered for the preliminary analysis. **Population growth, Median House Age, Percapita Income, Population growth rate, School District, Distance to CBT, Vacancy rate, Median no of Rooms, House price Index**. 
 
-## Study Area
-Obviously, City of Dallas/ Dallas County is the most preferred location because of the Knowledge about local markets. As both City and Metroplex are huge in size, I opted to chose a portion of area. The points that are considered while choosing the study area are as follows: 
+### Study Area
+
+Obviously, City of Dallas/ Dallas County is the preferred location considering the Knowledge about local market Areas. As both City and Metroplex are huge in size, I opted to chose a portion of area. 
 
 ```{r}
 library(leaflet)
@@ -63,6 +55,8 @@ leaflet() %>%
    addMarkers(-96.800902, 32.780762, popup = "Dallas") 
 ```
 
+
+The points that are considered while choosing the study area are as follows: 
 
 To build an accurate regression model, the sample population should have good variance that can reflect variance of the total population. So all three counties- Dallas, Collin, Denton are analyzed for spatial patterns with respect to the age of the houses and Per capita income levels.   
 
@@ -75,5 +69,54 @@ Image: ![](County_CT_HouseAgepng.png)
 
 Image: ![](County_CT_PercapiInc.png)
 
-**Vacancy rate:**
+#The Final Study Area is yet to be finalized. 
+
+***
+
+## Data Collection
+
+From the common percpective and by literature review knowledge, teh following variables are considered to influence house prices at censu tract level. 
+
+**List of variables with data availability** (Tentative)
+
+* Median House Price by Census Tract 
+
+* Job Proximity Index 
+
+* School Proficiency Index 
+
+* HPI by Census Track 
+
+* Median Income by Census Tract  
+
+* Median Population Age by Census Tract 
+
+* Mean Travel Time to work by Census Tract 
+
+* No of People with Bachelor's degree or Higher 
+
+* Home Owner Vacancy Rate or   
+
+~~Rental Vacancy Rate ~~
+
+* Median No of rooms 
+
+* Median House Age 
+
+* Distance from Central Business District (Yet to be calculated) 
+
+* Employers: Location of all employers with employee count and NACIS code in the area (MSA). (Point Shape File) 
+
+* No Developments: With geolocation coordinates, type, subclass data (Point Shape File) 
+
+~~Location Affordability Index~~
+
+~~Additonal No of Jobs created(From 2014 to 2015)~~ 
+
+* Land Use: Area cover is all three counties. Level of detail is Census Tract. Motto behind the data collection is that if we can calculate the area of open space/Vacant Land or percentage with respect to the Build Area such as Residential/ Single Detached.
+
+
+## Exploratory Data Analysis (EDA)
+
+
 
