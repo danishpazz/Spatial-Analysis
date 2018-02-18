@@ -1,7 +1,7 @@
 ---
-title: "ipowern"
+title: "Hedonic Regression Model"
 author: "Dinesh"
-date: "February 13, 2018"
+date: "February 14, 2018"
 output: html_document
 
 ---
@@ -32,16 +32,14 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 
 ## Objective
 The main purpose of this project is to identify and evaluate the factors that influence the median home value at census tract level. Segmenting it, the following are the expected outcomes of the project:  
-a. Identification of the variables at census track level and at site level that influence house prices.  
+a. Identification of the variables that influence house prices at census track level and at site level.  
 b. Analyze the spatial patterns of the neighborhood characteristics such as Demographics, school quality, travel time to work and so on.  
 c. Build a hedonic pricing model and calculate the coefficients that determines the buyer’s willingness to pay for additional characteristics.
 
 
 ## Preliminary Analysis
-In general when we think about the factors that influence house prices at Census Track level, the first thing comes to the mind are *Per capita income, Median Number of rooms and vacancy rates at  neighbourhood effects. From the literature review, many other variables such as Median House Price, Floor Space, Age | School District | Distance to CBD , No of Job Opening per person | Distance to Major Road* were also discussed. 
 
-
-So, after careful examination the following variables are considered for the preliminary analysis. **Population growth, Median House Age, Percapita Income, Population growth rate, School District, Distance to CBT, Vacancy rate, Median no of Rooms, House price Index**. 
+In general when we think about the factors that influence house prices at Census Track level, the first thing comes to the mind are *Per capita income, Year Build and vacancy rates at  neighbourhood effects. In many prominent academic literatures, many other variables such as Median House Price, Floor Space, Median Age of pOpulation, School District, Distance to CBD , No of Job Opening per person, Distance to Major Road* were discussed. 
 
 ### Study Area
 
@@ -75,7 +73,7 @@ Image: ![](County_CT_PercapiInc.png)
 
 ## Data Collection
 
-From the common percpective and by literature review knowledge, teh following variables are considered to influence house prices at censu tract level. 
+ After careful examination of academic literatures and also by practicality, the following variables are considered for the preliminary analysis:
 
 **List of variables with data availability** (Tentative)
 
@@ -93,13 +91,13 @@ From the common percpective and by literature review knowledge, teh following va
 
 * Mean Travel Time to work by Census Tract 
 
-* No of People with Bachelor's degree or Higher 
+* Number of People with Bachelor's degree or Higher 
 
 * Home Owner Vacancy Rate or   
 
-~~Rental Vacancy Rate ~~
+~~Rental Vacancy Rate~~
 
-* Median No of rooms 
+* Median Number of rooms 
 
 * Median House Age 
 
@@ -107,13 +105,14 @@ From the common percpective and by literature review knowledge, teh following va
 
 * Employers: Location of all employers with employee count and NACIS code in the area (MSA). (Point Shape File) 
 
-* No Developments: With geolocation coordinates, type, subclass data (Point Shape File) 
+* Number of New Developments: With geolocation coordinates, type, subclass data (Point Shape File) 
 
 ~~Location Affordability Index~~
 
 ~~Additonal No of Jobs created(From 2014 to 2015)~~ 
 
 * Land Use: Area cover is all three counties. Level of detail is Census Tract. Motto behind the data collection is that if we can calculate the area of open space/Vacant Land or percentage with respect to the Build Area such as Residential/ Single Detached.
+
 
 
 ## Exploratory Data Analysis (EDA)
