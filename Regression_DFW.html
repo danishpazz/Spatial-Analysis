@@ -11,7 +11,6 @@
 
 <meta name="author" content="Dinesh" />
 
-<meta name="date" content="2018-02-14" />
 
 <title>Hedonic Regression Model</title>
 
@@ -130,7 +129,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Hedonic Regression Model</h1>
 <h4 class="author"><em>Dinesh</em></h4>
-<h4 class="date"><em>February 14, 2018</em></h4>
+<h4 class="date"><em>February 2, 2018</em></h4>
 
 </div>
 
@@ -181,8 +180,8 @@ leaflet() %&gt;%
    setView(-96.800902, 32.780762, zoom = 10) %&gt;% 
    addTiles() %&gt;%
    addMarkers(-96.800902, 32.780762, popup = &quot;Dallas&quot;) </code></pre>
-<div id="htmlwidget-cc5b634661030ef9a6ea" style="width:672px;height:480px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-cc5b634661030ef9a6ea">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"setView":[[32.780762,-96.800902],10,[]],"calls":[{"method":"addTiles","args":["//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"maxNativeZoom":null,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"continuousWorld":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]},{"method":"addMarkers","args":[32.780762,-96.800902,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Dallas",null,null,null,null,null,null]}],"limits":{"lat":[32.780762,32.780762],"lng":[-96.800902,-96.800902]}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-61a2a14a44eea6aca2e8" style="width:672px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-61a2a14a44eea6aca2e8">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"setView":[[32.780762,-96.800902],10,[]],"calls":[{"method":"addTiles","args":["//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"maxNativeZoom":null,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"continuousWorld":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]},{"method":"addMarkers","args":[32.780762,-96.800902,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Dallas",null,null,null,null,null,null]}],"limits":{"lat":[32.780762,32.780762],"lng":[-96.800902,-96.800902]}},"evals":[],"jsHooks":[]}</script>
 <p>The points that are considered while choosing the study area are as follows:</p>
 <p>To build an accurate regression model, the sample population should have good variance that can reflect variance of the total population. So all three counties- Dallas, Collin, Denton are analyzed for spatial patterns with respect to the age of the houses and Per capita income levels.</p>
 <p><strong>Median House Age:</strong> Spatial clustering of same age houses reflects the growth of any city. As most of the north american cities are designed as monochromatic models, the residential houses near to the Central business district were built earlier and due to the growth, new houses were built on teh pheriphery of the city boundaries. This phenomenon can be clearly observed in Dalals County. Most of the early built houses are with in the circular boundary of I635 and I20. The following image illustrates the spatial pattern of it.</p>

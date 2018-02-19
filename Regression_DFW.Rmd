@@ -1,9 +1,10 @@
 ---
 title: "Hedonic Regression Model"
 author: "Dinesh"
-date: "February 14, 2018"
-output: html_document
-
+date: "February 2, 2018"
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
