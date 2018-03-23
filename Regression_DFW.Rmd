@@ -70,6 +70,14 @@ Image: ![](County_CT_PercapiInc.png)
 
 #The Final Study Area is yet to be finalized. 
 
+Why only these three counties!! 
+
+As all the market analysts and economists say Dallas MSA or Dallas Metroplex area has experienced and still performing as a major growth markets in United States and also, driving the U.S GDP and Job Growth Rate. 
+
+So after carefull examination, I witnessed that these counties have experienced a major rapid growth out of all in Texas.
+Second aspect that was considered is Spatial aspect. More application and analysis with respect to the spatial aspect can be done on Census tract or Block level. 
+
+Areas of Collin County, Dallas County, Denton County are considered for the study areas and Census Tracts level detail is considered for the spatial Analysis. 
 ***
 
 ## Data Collection
