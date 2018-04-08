@@ -83,7 +83,7 @@ Areas of Collin County, Dallas County, Denton County are considered for the stud
 ## Data Collection
 
  After careful examination of academic literatures and also by practicality, the following variables are considered for the preliminary analysis:
-●Median House Value (Dependent Variable)
+● Median House Value (Dependent Variable)
 ● Median no of rooms
 ● Median house age
 ● HH Median Income/ HH Mean Income/ Median or Mean Family Income
