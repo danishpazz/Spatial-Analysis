@@ -97,13 +97,12 @@ Areas of Collin County, Dallas County, Denton County are considered for the stud
 ● Independent School District
 ● Weighted distance to 5 employment centre / Job Proximity Index
 ● Dummy Variable of Golf Court
-● % White Collar People
 
 ## Exploratory Data Analysis (EDA)
 
 
 
 
-## Factor Analysis
+
 
 
