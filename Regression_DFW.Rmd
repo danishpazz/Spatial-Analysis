@@ -83,48 +83,27 @@ Areas of Collin County, Dallas County, Denton County are considered for the stud
 ## Data Collection
 
  After careful examination of academic literatures and also by practicality, the following variables are considered for the preliminary analysis:
-
-**List of variables with data availability** (Tentative)
-
-* Median House Price by Census Tract 
-
-* Job Proximity Index 
-
-* School Proficiency Index 
-
-* HPI by Census Track 
-
-* Median Income by Census Tract  
-
-* Median Population Age by Census Tract 
-
-* Mean Travel Time to work by Census Tract 
-
-* Number of People with Bachelor's degree or Higher 
-
-* Home Owner Vacancy Rate or   
-
-~~Rental Vacancy Rate~~
-
-* Median Number of rooms 
-
-* Median House Age 
-
-* Distance from Central Business District (Yet to be calculated) 
-
-* Employers: Location of all employers with employee count and NACIS code in the area (MSA). (Point Shape File) 
-
-* Number of New Developments: With geolocation coordinates, type, subclass data (Point Shape File) 
-
-~~Location Affordability Index~~
-
-~~Additonal No of Jobs created(From 2014 to 2015)~~ 
-
-* Land Use: Area cover is all three counties. Level of detail is Census Tract. Motto behind the data collection is that if we can calculate the area of open space/Vacant Land or percentage with respect to the Build Area such as Residential/ Single Detached.
-
-
+●Median House Value (Dependent Variable)
+● Median no of rooms
+● Median house age
+● HH Median Income/ HH Mean Income/ Median or Mean Family Income
+● Median (Population) Age
+● Mean Travel time to work
+● % percentage of population with bachelor’s degree
+● Homeowner Vacancy Rate
+● Median Per capita Income
+● No of detached houses
+---------------------------------
+● Independent School District
+● Weighted distance to 5 employment centre / Job Proximity Index
+● Dummy Variable of Golf Court
+● % White Collar People
 
 ## Exploratory Data Analysis (EDA)
 
+
+
+
+## Factor Analysis
 
 
